@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import '../css/signup.css'
 import {Link, useNavigate} from 'react-router-dom'
 
@@ -8,6 +8,7 @@ const Signup = () => {
   const [formData,setFormData] = useState({})
   const [error,setError] = useState(null);
   const [loading,setLoading] = useState(false);
+
   const navigate = useNavigate();
   const handleChange = (e)=>{
    setFormData({
@@ -17,6 +18,11 @@ const Signup = () => {
   }
   const handleSubmit = async(e) =>{
     e.preventDefault();
+      // Check if any field is empty
+      if (!formData.username || !formData.email || !formData.password) {
+        setError('All fields are required');
+        return;
+      }
     try {
       setLoading(true);
       const res = await fetch('/api/auth/signup',
@@ -45,7 +51,7 @@ const Signup = () => {
     }
   
   }
-  
+
   return (
     <div className='signup'>
       <h1>Sign up</h1>
