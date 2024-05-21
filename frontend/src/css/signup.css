@@ -36,8 +36,11 @@
 }
 .link{
     text-decoration: none;
-    color: rgb(65, 68, 243);
+    color: rgb(25, 26, 77);
 }
 .account{
     width: 400px;
+}
+.error{
+    color: red;
 }
