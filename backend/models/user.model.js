@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
         type:String,
         enum:['user','admin'],
         default: 'user'
-    }
+    },
+    avatar:{
+      type:String,
+      default:"https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
+    },
 },
 { timestamps:true })
 

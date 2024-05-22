@@ -25,7 +25,7 @@
     background-color: rgb(47, 47, 63);
     padding: 10px 20px;
     border-radius: 8px;
-    color: white;
+    color: rgb(255, 255, 255);
     cursor: pointer;
 }
 .sign-up-btn:hover{

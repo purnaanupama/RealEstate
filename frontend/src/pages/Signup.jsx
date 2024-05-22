@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import '../css/signup.css'
 import {Link, useNavigate} from 'react-router-dom'
+import OAuth from '../components/OAuth'
 
 
 const Signup = () => {
@@ -65,7 +66,7 @@ const Signup = () => {
       <button disabled={loading} className='sign-up-btn'>
              {loading?'Loading...':'Sign Up'}
       </button>
-         
+      <OAuth/>
       <div className="account">
         <p>Have an account ?  <Link to={'/sign-in'} className='link'>Sign-in</Link></p>
       </div>

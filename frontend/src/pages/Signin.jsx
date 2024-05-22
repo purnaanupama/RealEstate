@@ -3,6 +3,7 @@ import '../css/signup.css'
 import {Link, useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signInStart, signInSuccess, signInFailure} from '../redux/userSlice'
+import OAuth from '../components/OAuth'
 
 const Signin = () => {
   //get the form inserted values into formData variable
@@ -33,7 +34,7 @@ const Signin = () => {
       const data = await res.json();
       console.log(data);
       if(data.email){
-        dispatch(signInSuccess(data.message));
+        dispatch(signInSuccess(data));
         navigate('/')
         return
       }
@@ -56,6 +57,7 @@ const Signin = () => {
       <button disabled={loading} className='sign-up-btn'>
              {loading?'Loading...':'Sign In'}
       </button>
+      <OAuth/>
          
       <div className="account">
         <p>Dont have an account ?  <Link to={'/sign-up'} className='link'>Sign-up</Link></p>
