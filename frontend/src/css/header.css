@@ -41,7 +41,8 @@ form > input{
 .menu{
     list-style-type: none;
     display: flex;
-
+    align-items: center;
+    justify-content: center;
 }
 .menu li{
     color: black;
@@ -54,6 +55,12 @@ form > input{
 .link{
     text-decoration: none;
     color: none;
+}
+.avatar{
+   border-radius: 50%; 
+   height: 37px;
+   margin-top: 5px;
+   object-fit: cover;
 }
 
 @media screen and (max-width: 700px){
