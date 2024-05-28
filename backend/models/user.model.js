@@ -25,6 +25,13 @@ const userSchema = new mongoose.Schema({
       type:String,
       default:"https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
     },
+    verified_user:{
+      type:Boolean,
+      default:false
+    },
+    otp_code:{
+      type:Number
+    }
 },
 { timestamps:true })
 

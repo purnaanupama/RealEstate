@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState } from 'react'
 import '../css/signup.css'
 import {Link, useNavigate} from 'react-router-dom'
 import OAuth from '../components/OAuth'
@@ -40,7 +40,7 @@ const Signup = () => {
       if(data.status === 'success'){
         setLoading(false);
         setError(null);
-        navigate('/sign-in')
+        navigate('/otp');
         return
       }
       setLoading(false);

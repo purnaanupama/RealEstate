@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
+const cookieParser = require('cookie-parser');
 
 //config dotenv
 dotenv.config();
@@ -13,6 +14,9 @@ const app = express();
 //body parser
 app.use(express.json());
 
+//cookie parser
+app.use(cookieParser());
+
 mongoose.connect(process.env.MONGO)
         .then(()=>{
             console.log('Connected to MongoDB');
@@ -22,7 +26,7 @@ mongoose.connect(process.env.MONGO)
         })
 
 //creating and starting server
-app.listen(3000,()=>{
+app.listen(process.env.PORT || 3000,()=>{
     console.log('Server running on port 3000');
 })
 

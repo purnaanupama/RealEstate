@@ -12,9 +12,10 @@
     width: 100px;
     object-fit: cover;
     cursor: pointer;
+    border: 1px solid black;
 }
 .form1{
-    margin-top: 40px;
+    margin-top: 20px;
     flex-direction: column;
     display: flex;
     align-items: center;
@@ -48,13 +49,18 @@ opacity: .9;
 }
 .options p{
     cursor: pointer;
+    border: 1px solid red;
+    padding: 5px 10px;
+    border-radius: 4px;
 }
 .options{
     display: flex;
     gap: 30px;
-    padding-left: 0px;
     margin-top: 20px;
     width: 400px;
-   color: red;
-
+   color: red; 
+}
+.options p:hover{
+    color: white;
+    background-color: red;
 }

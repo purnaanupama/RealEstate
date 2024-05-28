@@ -3,23 +3,71 @@ const bcryptjs= require('bcryptjs');
 const errorHandler = require('../utils/error');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const nodemailer = require('nodemailer');
 
 //config dotenv
 dotenv.config();
+exports.accountVerify = async(req,res,next)=>{
+   const {otp} = req.body;
+   const user = await User.findOne({otp_code:otp});
+   if(user){
+    user.verified_user = true;
+    user.otp_code = null; 
+    await user.save();
+    res.status(200).json({ 
+      status: 'success', 
+      message: 'User verified successfully' });
+   }else{
+    return res.status(400).json({ status: 'fail', 
+                                  message: 'Invalid OTP' });
+   }
+}
 
-exports.register = async(req,res,next)=>{
-  const {username,email,password,role} = req.body;
+exports.register = async (req, res, next) => {
+  const { username, email, password, role } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({username, email, password : hashedPassword})
-  try{
-    await newUser.save();
-    res.status(201)
-    .json({
-      status : 'success',
-      data : req.body
-    })
-  }catch(error){
-     next(error)
+  const otp = Math.floor(1000 + Math.random() * 9000);
+  const newUser = new User({ username, email, password: hashedPassword, otp_code: otp });
+  try {
+      await newUser.save();
+
+      // Create a transporter using SMTP
+      let transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // use TLS
+          auth: {
+              user: 'anupamahera2022@gmail.com',
+              pass: 'ksfbiqywsbxnjwhm'
+          },
+          tls: {
+              // do not fail on invalid certs
+              rejectUnauthorized: false
+          }
+      });
+
+      // Send mail with defined transport object
+      let info = await transporter.sendMail({
+          from: 'anupamahera2022@gmail.com', // sender address
+          to: email, // recipient email address
+          subject: 'HERE IS YOUR OTP CODE TO SUCCESSFULLY REGISTER TO ESTATE-EASE', // subject line
+          text: `Your OTP code is: ${otp}`, // plain text body
+          html: `<b>Your OTP code is: ${otp}</b>` // html body
+      });
+
+      if(info.messageId){
+        console.log('Message sent: %s', info.messageId);
+      } else {
+        console.log("Failed");
+      }
+
+      // Send success response after email sending is completed
+      res.status(201).json({
+          status: 'success',
+          data: req.body
+      });
+  } catch (error) {
+      next(error);
   }
 };
 
@@ -28,7 +76,7 @@ exports.signin = async(req,res,next)=>{
    try{
    //check if email exist
    const validUser = await User.findOne({email}) //go to database and find if user exist with email we got from req.body
-   if(!validUser) return next(errorHandler(404,'User not found !'));
+   if(!validUser || !validUser.verified_user) return next(errorHandler(404,'User not found !'));
    const validPassword = bcryptjs.compareSync(password,validUser.password);
    if(!validPassword) return next(errorHandler(401,'Wrong credentials !'))
   //if validations passed create web token

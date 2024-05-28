@@ -1,0 +1,22 @@
+.otp_form{
+    display:flex;
+    flex-direction: column;
+    padding: 30px;
+    width: 400px;
+    height: 200px;
+    background-color: bisque;
+    gap: 20px;
+}
+.otp_form_page{
+   display: flex;
+   width: 100%;
+   height: 500px;
+   display: flex;
+   align-items: center;
+   justify-content: center; 
+}
+.otp_form > input {
+   background-color: white;
+   padding: 20px;
+   width: 300px;
+}
