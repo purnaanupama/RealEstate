@@ -14,6 +14,9 @@ const app = express();
 //body parser
 app.use(express.json());
 
+//url parser
+app.use(express.urlencoded({ extended: true }));
+
 //cookie parser
 app.use(cookieParser());
 

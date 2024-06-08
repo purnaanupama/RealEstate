@@ -40,6 +40,8 @@ const Signup = () => {
       if(data.status === 'success'){
         setLoading(false);
         setError(null);
+        console.log('Email:', data.data.email);
+        localStorage.setItem('Email',data.data.email);
         navigate('/otp');
         return
       }

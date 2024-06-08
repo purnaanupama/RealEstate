@@ -1,11 +1,12 @@
-import React from 'react'
 import '../css/profile.css'
 import { useSelector } from 'react-redux'
 import { useRef, useState, useEffect } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../../firebase.js'
-import { updateUserStart, updateUserSuccess, updateUserFailure} from '../redux/userSlice.jsx';
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess} from '../redux/userSlice.jsx';
 import { useDispatch } from 'react-redux';
+import { useNavigate} from 'react-router-dom';
+import Delete from '../components/deleteSuccess.jsx';
 
 const Profile = () => {
   const { currentUser,loading,error } = useSelector((state) => state.user)
@@ -13,10 +14,19 @@ const Profile = () => {
   const [filePerc, setFilePerc] = useState(0)
   const [file, setFile] = useState(undefined)
   const [fileUploadError, setFileUploadError] = useState(false)
-  const [formData, setFormData] = useState({})
+  const [showDeleteSuccess,setShowDeleteSuccess]=useState(false);
+  const [formData, setFormData] = useState({
+    email: currentUser.email,
+    username : currentUser.username,
+    avatar: currentUser.avatar
+  })
   const [isVisible, setIsVisible] = useState(false)
   const [updateSuccess,setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+
 
  useEffect(() => {
     if (file) {
@@ -24,8 +34,7 @@ const Profile = () => {
     }
   }, [file])
 
-
-
+ 
   useEffect(() => {
     if (filePerc === 100) {
       setIsVisible(true)
@@ -99,6 +108,14 @@ const Profile = () => {
     
      const data = await res.json();
      console.log(data);
+     if(data.status==='email-change'){
+      localStorage.setItem('Email',formData.email);
+      console.log(formData.email);
+      dispatch(updateUserSuccess(data))
+      setUpdateSuccess(true);
+      navigate('/otp-email-update')
+      return
+     }
      if(data.status === 'fail'){
        dispatch(updateUserFailure(data.message));
        return;
@@ -110,12 +127,46 @@ const Profile = () => {
      console.log(error);
     }
    }
+   const handleDeleteAccount = async () => {
+    try {
+        // Show delete success message
+        setShowDeleteSuccess(true);
+
+        // Start the delete process (dispatch action)
+        dispatch(deleteUserStart());
+
+        // Wait for the timer to finish (4 seconds)
+        await new Promise(resolve => setTimeout(resolve, 4000));
+
+        // Proceed with the fetch request to delete the user
+        const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+            method: 'DELETE'
+        });
+
+        const data = await res.json();
+
+        if (data.success === false) {
+            // Handle failure
+            dispatch(deleteUserFailure(data.message));
+            return;
+        }
+
+        // Handle success
+        dispatch(deleteUserSuccess(data));
+    } catch (error) {
+        // Handle error
+        dispatch(deleteUserFailure(error.message));
+    } finally {
+        // Hide delete success message after the operation
+        setShowDeleteSuccess(false);
+    }
+};
 
   return (
     <div className='profile'>
       <h1>User Profile</h1>
 
-      <form onSubmit={handleSubmit} className='form1' >
+      <form onSubmit={handleSubmit} className='form1'>
         <input
           onChange={handleFileChange}
           type='file'
@@ -135,7 +186,7 @@ const Profile = () => {
           {fileUploadError ? (
             <span style={{ color: 'red' }}>Error Uploading Image</span>
           ) : filePerc > 0 && filePerc < 100 ? (
-            <span style={{ color: 'green' }}>{`Uploading ${filePerc}%`}</span>
+            <span style={{ color: 'green',textAlign:'center'}}>{`Uploading ${filePerc}%`}</span>
           ) : filePerc === 100 && isVisible ? (
             <span style={{ color: 'green' }}>Upload Complete</span>
           ) : (
@@ -151,11 +202,12 @@ const Profile = () => {
         </button>
       </form>
       <div className='options'>
-        <p>Delete Account</p>
+        <p onClick={handleDeleteAccount}>Delete Account</p>
         <p>Sign Out</p>
       </div>
-      <p style={{color:'red',marginTop:'20px'}}>{error ? error: '' }</p>
-      <p style={{color:'green',marginTop:'20px'}}>{updateSuccess ? 'Updated Successfully': '' }</p>
+      <p style={{color:'r#C70039',marginTop:'20px'}}>{error ? error: '' }</p>
+      <p className='successMsg' style={{color:'rgb(15, 132, 87)',marginTop:'20px'}}>{updateSuccess ? 'Updated Successfully': '' }</p>
+      {showDeleteSuccess?<Delete/>:''}
     </div>
   )
 }

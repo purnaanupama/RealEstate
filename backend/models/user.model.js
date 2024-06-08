@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
       default:false
     },
     otp_code:{
-      type:Number
+      type:String
     }
 },
 { timestamps:true })

@@ -5,7 +5,10 @@ const { verifyToken } = require('../utils/verifyUser');
 //using express create router
 const router = express.Router();
 
-router.get('/test',userController.test)
+router.post('/resend-otp',userController.resendOTP)
 router.post('/update/:id',verifyToken,userController.updateUser)
+router.delete('/delete/:id',verifyToken,userController.deleteUser)
+router.patch('/updateEmail',verifyToken,userController.updateEmail)
+
 
 module.exports =  router;

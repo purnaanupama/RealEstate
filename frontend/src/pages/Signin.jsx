@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import '../css/signup.css'
 import {Link, useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +9,11 @@ const Signin = () => {
   //get the form inserted values into formData variable
   const [formData,setFormData] = useState({})
   const {loading,error} = useSelector((state)=>state.user)
+
   const navigate = useNavigate();
+
+
+
   //initialize dispatch
   const dispatch = useDispatch();
   const handleChange = (e)=>{

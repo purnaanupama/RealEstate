@@ -32,7 +32,7 @@ const Header = () => {
         
         <Link className='link' to='/profile'>
         {currentUser?(
-          <li><img className='avatar' src={currentUser.avatar} alt="profile" /></li>
+          <li className='avatarContainer'><img className='avatar' src={currentUser.avatar} alt="profile" /></li>
         ):(
             <li>Sign in</li>
         )}

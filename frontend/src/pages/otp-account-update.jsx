@@ -1,15 +1,24 @@
+
 import { React, useEffect, useState } from 'react';
 import '../css/OTP_form.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { updateUserStart, updateUserSuccess, updateUserFailure} from '../redux/userSlice.jsx';
 
-const OTP = () => {
-  // State initialization
+
+const OTP2 = () => {
+  
+      // State initialization
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [currentUserEmail, setCurrentUserEmail] = useState('');
   const [loading2, setLoading2] = useState(false);
   const [otpTimer, setOtpTimer] = useState(false);
+  const [updateSuccess,setUpdateSuccess] = useState(false);
+  const { currentUser } = useSelector((state) => state.user)
+  const dispatch = useDispatch();
   
   useEffect(() => {
     if(otpTimer){
@@ -47,22 +56,30 @@ const OTP = () => {
     }
     try {
       setLoading(true);
-      const res = await fetch('/api/auth/account-verify', {
+      dispatch(updateUserStart());
+      const res = await fetch('/api/user/updateEmail', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+            otp:formData,
+            email:currentUserEmail,
+            currentEmail:currentUser.email
+        }),
       });
       const data = await res.json();
       console.log(data);
       if (data.status === 'success') {
         setLoading(false);
         setError(null);
-        navigate('/sign-in');
+        dispatch(updateUserSuccess(data))
+        setUpdateSuccess(true);
+        navigate('/profile');
         return;
       }
       setLoading(false);
+      dispatch(updateUserFailure(data.message));
       setError(data.message);
     } catch (error) {
       setLoading(false);
@@ -75,12 +92,12 @@ const OTP = () => {
     try {
       setLoading2(true);
       setOtpTimer(true);
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch('/api/user/resend-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: 'user', password: '1234', email: currentUserEmail }),
+        body: JSON.stringify({ username: 'user1', password: '1234', email: currentUser.email, newEmail:currentUserEmail}),
       });
       const response = await res.json();
       console.log(response);
@@ -105,13 +122,13 @@ const OTP = () => {
         <div className="wrapper">
           <h3>Verify email address</h3>
           <p style={{ fontSize: 14 }}>
-            To verify your account please enter the OTP code send to the email :{' '}
-            <span style={{ color: 'purple', fontWeight: 600 }}>{currentUserEmail}</span>{' '}
+            To update your new email please enter the OTP code sent to :
+            <span style={{ color: 'purple', fontWeight: 600 }}> {currentUserEmail}</span>
           </p>
           <div className="wrapper2">
             <input id="otp" type="text" placeholder="Enter OTP Code..." maxLength={6} pattern="[0-9]" onChange={handleChange} />
             <button type="submit" disabled={loading} onClick={handleSubmit}>
-              {loading ? 'Verifying User...' : 'Verify Account'}
+              {loading ? 'Updating Email...' : 'Update Email'}
             </button>
             {error && <p className="error1">{error}</p>}
           </div>
@@ -121,7 +138,9 @@ const OTP = () => {
         </button>
       </form>
     </div>
+    
   );
 };
 
-export default OTP;
+
+export default OTP2;

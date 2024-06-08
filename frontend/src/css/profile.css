@@ -6,6 +6,7 @@
     height: 700px;
     background-color: rgb(255, 255, 255);
 }
+
 .avatar1{
     border-radius: 50%;
     height: 100px;
@@ -14,6 +15,7 @@
     cursor: pointer;
     border: 1px solid black;
 }
+
 .form1{
     margin-top: 20px;
     flex-direction: column;
@@ -22,18 +24,20 @@
     justify-content: center;
     gap: 20px;
 }
+
 .form1 input{
     background: rgb(207, 216, 226);
     padding: 10px 20px;
     width: 400px;
     border-radius: 8px;
 }
+
 .text2{
     margin-top: 10px;
 }
 .update{
     width: 400px; 
-    background-color: rgb(3, 138, 87);
+    background-color: rgb(6, 142, 90);
     padding: 10px 20px;
     border-radius: 8px;
     color: rgb(255, 255, 255);
@@ -41,26 +45,35 @@
     border: none;
     box-shadow: 2px 1px 5px 1px rgb(99, 99, 99);
 }
+
 .update:hover{
 opacity: .9;
 }
 .update:disabled{
     opacity: .7;
 }
+ 
+.successMsg{
+    width: 400px;
+    text-align: center;
+}
+
 .options p{
     cursor: pointer;
-    border: 1px solid red;
+    border: 1px solid #C70039;
     padding: 5px 10px;
     border-radius: 4px;
 }
+
 .options{
     display: flex;
     gap: 30px;
     margin-top: 20px;
     width: 400px;
-   color: red; 
+    color: #C70039; 
 }
+
 .options p:hover{
     color: white;
-    background-color: red;
+    background-color: #C70039;
 }

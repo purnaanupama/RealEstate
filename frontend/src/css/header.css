@@ -58,9 +58,10 @@ form > input{
 }
 .avatar{
    border-radius: 50%; 
-   height: 37px;
+   height: 37px; 
+   width: 37px; 
    margin-top: 5px;
-   object-fit: cover;
+   border: 1px solid black;
 }
 
 @media screen and (max-width: 700px){

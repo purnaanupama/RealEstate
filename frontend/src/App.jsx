@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 import PrivateRoute from './components/privateRoute';
 import OTP from './pages/OTP';
+import OTP2 from './pages/otp-account-update';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Header/>
      <Routes>
       <Route path='/otp' element={<OTP/>}/>
+      <Route path='/otp-email-update' element={<OTP2/>}/>
       <Route path='/' element={<Home />} />
       <Route path='/sign-in' element={<Signin />} />
       <Route path='/about' element={<About />} />
