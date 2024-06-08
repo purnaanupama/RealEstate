@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useRef, useState, useEffect } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../../firebase.js'
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess} from '../redux/userSlice.jsx';
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess, SignOutUserStart, SignOutUserFailure, SignOutUserSuccess} from '../redux/userSlice.jsx';
 import { useDispatch } from 'react-redux';
 import { useNavigate} from 'react-router-dom';
 import Delete from '../components/deleteSuccess.jsx';
@@ -131,26 +131,20 @@ const Profile = () => {
     try {
         // Show delete success message
         setShowDeleteSuccess(true);
-
         // Start the delete process (dispatch action)
         dispatch(deleteUserStart());
-
         // Wait for the timer to finish (4 seconds)
         await new Promise(resolve => setTimeout(resolve, 4000));
-
         // Proceed with the fetch request to delete the user
         const res = await fetch(`/api/user/delete/${currentUser._id}`, {
             method: 'DELETE'
         });
-
         const data = await res.json();
-
         if (data.success === false) {
             // Handle failure
             dispatch(deleteUserFailure(data.message));
             return;
         }
-
         // Handle success
         dispatch(deleteUserSuccess(data));
     } catch (error) {
@@ -161,6 +155,20 @@ const Profile = () => {
         setShowDeleteSuccess(false);
     }
 };
+ const handleSignOut=async()=>{
+    try {
+     dispatch(SignOutUserStart());
+     const response = await fetch('/api/auth/signout');
+     const data = await response.json();
+     if(data.success === false){
+      dispatch(SignOutUserFailure(data.message))
+      return;
+     }
+     dispatch(SignOutUserSuccess(data))
+    } catch (error) {
+      dispatch(SignOutUserFailure(error.message))
+    }
+ }
 
   return (
     <div className='profile'>
@@ -203,7 +211,7 @@ const Profile = () => {
       </form>
       <div className='options'>
         <p onClick={handleDeleteAccount}>Delete Account</p>
-        <p>Sign Out</p>
+        <p onClick={handleSignOut}>Sign Out</p>
       </div>
       <p style={{color:'r#C70039',marginTop:'20px'}}>{error ? error: '' }</p>
       <p className='successMsg' style={{color:'rgb(15, 132, 87)',marginTop:'20px'}}>{updateSuccess ? 'Updated Successfully': '' }</p>
