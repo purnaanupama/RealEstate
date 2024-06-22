@@ -1,29 +1,39 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import '../css/signup.css'
 import {Link, useNavigate} from 'react-router-dom'
 import OAuth from '../components/OAuth'
 
 
 const Signup = () => {
-  //get the form inserted values into formData variable
+  //Initializing state and other utilities
   const [formData,setFormData] = useState({})
   const [error,setError] = useState(null);
   const [loading,setLoading] = useState(false);
-
   const navigate = useNavigate();
+
+  //handle form values entered
   const handleChange = (e)=>{
    setFormData({
     ...formData,
     [e.target.id]:e.target.value,
    })
   }
+   
+  //handle signup process with the backend
   const handleSubmit = async(e) =>{
-    e.preventDefault();
-      // Check if any field is empty
-      if (!formData.username || !formData.email || !formData.password) {
+  e.preventDefault();
+  // Check if any field is empty
+    if (!formData.username || !formData.email || !formData.password || !formData.password_confirm) {
         setError('All fields are required');
-        return;
-      }
+        return;}
+  // Check if paswwords match
+    if (formData.password !== formData.password_confirm) {
+        setError('Passwords do not match');
+        return;}
+  // Check if username has 4 or more characters
+    if ((formData.username).length < 4) {
+        setError('username should be atleast 4 characters long');
+        return;}
     try {
       setLoading(true);
       const res = await fetch('/api/auth/signup',
@@ -34,7 +44,7 @@ const Signup = () => {
           },
           body:JSON.stringify(formData)
         }
-      );
+      )
       const data = await res.json();
       console.log(data);
       if(data.status === 'success'){
@@ -43,11 +53,11 @@ const Signup = () => {
         console.log('Email:', data.data.email);
         localStorage.setItem('Email',data.data.email);
         navigate('/otp');
-        return
-      }
+        return}
+
       setLoading(false);
-      setError(data.message);
-    } catch (error) {
+      setError(data.message);} 
+     catch (error) {
       setLoading(false);
       setError(error.message)
       console.log(error.message);
@@ -65,6 +75,8 @@ const Signup = () => {
       className='text2' id='email' onChange={handleChange}/>
       <input type="password" placeholder='password'
       className='text3' id='password' onChange={handleChange}/>
+      <input type="password" placeholder='confirm password'
+      className='text3' id='password_confirm' onChange={handleChange}/>
       <button disabled={loading} className='sign-up-btn'>
              {loading?'Loading...':'Sign Up'}
       </button>
@@ -78,5 +90,6 @@ const Signup = () => {
     </div>
   )
 }
+
 
 export default Signup

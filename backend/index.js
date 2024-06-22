@@ -1,48 +1,52 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const listingRouter = require('./routes/listing.route')
-const userRouter = require('./routes/user.route')
-const authRouter = require('./routes/auth.route')
 const cookieParser = require('cookie-parser');
 
-//config dotenv
+// Config dotenv
 dotenv.config();
 
-//create express app
+// Create express app
 const app = express();
 
-//body parser
+// Body parser
 app.use(express.json());
 
-//url parser
+// URL parser
 app.use(express.urlencoded({ extended: true }));
 
-//cookie parser
+// Cookie parser
 app.use(cookieParser());
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO)
-        .then(()=>{
-            console.log('Connected to MongoDB');
-        })
-        .catch((err)=>{
-            console.log(err);;
-        })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err.message);
+    // Handle MongoDB connection error as per your application's requirements
+    // You may choose to log it, notify admins, or take other actions
+  });
 
-//creating and starting server
-app.listen(process.env.PORT || 3000,()=>{
-    console.log('Server running on port 3000');
-})
+// Mount routers
+app.use('/api/user', require('./routes/user.route'));
+app.use('/api/auth', require('./routes/auth.route'));
+app.use('/api/listing', require('./routes/listing.route'));
 
-app.use('/api/user',userRouter)
-app.use('/api/auth',authRouter)
-app.use('/api/listing',listingRouter)
-app.use((err,req,res,next)=>{
-   const statusCode = err.statusCode || 500;
-   const message = err.message || 'Internal Server Error'
-   return res.status(statusCode).json({
-    status:'fail',
+// Global error handler
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  return res.status(statusCode).json({
+    status: 'fail',
     statusCode,
     message
-   })
-})
+  });
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

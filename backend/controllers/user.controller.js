@@ -4,6 +4,7 @@ const errorHandler = require('../utils/error');
 const nodemailer = require('nodemailer');
 const speakeasy = require('speakeasy');
 
+
 //verify otp code
 const verifyOtp = function verifyOtp(token){
     let verified = speakeasy.totp.verifyDelta({
@@ -101,6 +102,7 @@ exports.updateUser = async(req,res,next)=>{
             rejectUnauthorized: false
         }
     });
+
   
     // Send mail with defined transport object
     let info = await transporter.sendMail({
@@ -173,14 +175,12 @@ exports.updateEmail = async(req,res,next)=>{
         if (user){
             //update email and remove otp
             user.otp_code = null;
-            user.email = email;
             await user.save();
 
             const {password,...rest} =user._doc
             res.status(200).json({ 
                 ...rest,
                 status: 'success', 
-                message: 'Email Updated' 
             });
         }else{
             res.status(400).json({ 
@@ -203,14 +203,54 @@ exports.updateEmail = async(req,res,next)=>{
   
 
 
-exports.deleteUser = async(req,res,next)=>{
-    if(req.user.id != req.params.id) return next(errorHandler(401,'Cannot Delete Account'))
-        try {
-           await User.findByIdAndDelete(req.params.id) 
-           res.clearCookie('access_token');
-           res.status(200).json('User has been deleted !')
-        } catch (error) {
-          next(error) 
-        }
-}
+   exports.deleteUser = async (req, res, next) => {
+    const { email, pass } = req.body; // Use 'confirmPass' to match the request body
+    if (req.user.id !== req.params.id) {
+        return next(errorHandler(401, 'Cannot Delete Account'));
+    }
+  console.log(pass.confirmPass);
+    try {
+        const currentUser = await User.findOne({ email });
 
+        if (!currentUser) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'User not found!'
+            });
+        }
+        if(currentUser.type === "google"){
+            await User.findByIdAndDelete(req.params.id);
+            res.clearCookie('access_token');
+            return res.status(200).json({
+                status: 'success',
+                message: 'User deleted successfully !!'
+            })
+        }
+        const confirmPassString = String(pass.confirmPass);
+        // Ensure 'confirmPass' is a string
+        if (typeof confirmPassString !== 'string') {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Password must be a string!'
+            });
+        }
+      
+        const validPassword = bcryptjs.compareSync(confirmPassString, currentUser.password);
+
+        if (!validPassword) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Password Incorrect cannot delete account. If forgotten update the password and try again !'
+            });
+        }
+
+        await User.findByIdAndDelete(req.params.id);
+        res.clearCookie('access_token');
+        return res.status(200).json({
+            status: 'success',
+            message: 'User deleted successfully !!'
+        })
+    } catch (error) {
+        next(error);
+    }
+};

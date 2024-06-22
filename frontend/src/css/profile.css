@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 700px;
+    height: 100%;
     background-color: rgb(255, 255, 255);
 }
 
@@ -14,6 +14,9 @@
     object-fit: cover;
     cursor: pointer;
     border: 1px solid black;
+}
+.superTitle{
+    margin-top: 40px;
 }
 
 .form1{
@@ -32,9 +35,6 @@
     border-radius: 8px;
 }
 
-.text2{
-    margin-top: 10px;
-}
 .update{
     width: 400px; 
     background-color: rgb(6, 142, 90);
@@ -53,10 +53,7 @@ opacity: .9;
     opacity: .7;
 }
  
-.successMsg{
-    width: 400px;
-    text-align: center;
-}
+
 
 .options p{
     cursor: pointer;
@@ -68,12 +65,26 @@ opacity: .9;
 .options{
     display: flex;
     gap: 30px;
-    margin-top: 20px;
     width: 400px;
     color: #C70039; 
+    margin-bottom: 30px;
+    margin-top: 20px;
 }
 
 .options p:hover{
     color: white;
     background-color: #C70039;
+}
+.createListing{
+    width: 400px; 
+    background-color: rgb(14, 44, 72);
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    border: none;
+    box-shadow: 2px 1px 5px 1px rgb(99, 99, 99);
+}
+.createListing:hover{
+    background-color: rgb(21, 59, 95);
 }

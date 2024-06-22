@@ -1,7 +1,7 @@
 
-import { React, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../css/OTP_form.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { updateUserStart, updateUserSuccess, updateUserFailure} from '../redux/userSlice.jsx';
@@ -75,7 +75,7 @@ const OTP2 = () => {
         setError(null);
         dispatch(updateUserSuccess(data))
         setUpdateSuccess(true);
-        navigate('/profile');
+        navigate('/give-password');
         return;
       }
       setLoading(false);

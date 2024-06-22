@@ -1,9 +1,8 @@
-import { React, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../css/OTP_form.css';
-import { Link, useNavigate } from 'react-router-dom';
-import Delete from '../components/deleteSuccess';
+import { useNavigate } from 'react-router-dom';
 
-const OTP = () => {
+const ResetPW = () => {
   // State initialization
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
@@ -11,7 +10,7 @@ const OTP = () => {
   const [currentUserEmail, setCurrentUserEmail] = useState('');
   const [loading2, setLoading2] = useState(false);
   const [otpTimer, setOtpTimer] = useState(false);
-  const [showRegisterSuccess,setShowRegisterSuccess]=useState(false);
+  const navigate = useNavigate();
   
   useEffect(() => {
     if(otpTimer){
@@ -32,7 +31,7 @@ const OTP = () => {
     currentUserEmail();
   }, []);
 
-  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     setFormData({
@@ -61,12 +60,7 @@ const OTP = () => {
       if (data.status === 'success') {
         setLoading(false);
         setError(null);
-        setShowRegisterSuccess(true);
-        // Wait for the timer to finish (4 seconds)
-        await new Promise(resolve => setTimeout(resolve, 4000));
-        setShowRegisterSuccess(false);
-        navigate('/sign-in');
-        
+        navigate('/reset-password');
         return;
       }
       setLoading(false);
@@ -82,7 +76,7 @@ const OTP = () => {
     try {
       setLoading2(true);
       setOtpTimer(true);
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch('/api/auth/signup',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,9 +104,9 @@ const OTP = () => {
           <span style={{ color: 'rgb(106, 107, 109)', fontSize: 25 }}>Ease</span>
         </h3>
         <div className="wrapper">
-          <h3>Verify email address</h3>
+          <h3>Verify email address to reset Password</h3>
           <p style={{ fontSize: 14 }}>
-            To verify your account please enter the OTP code send to the email :{' '}
+            To reset your password please enter the OTP code sent to :{' '}
             <span style={{ color: 'purple', fontWeight: 600 }}>{currentUserEmail}</span>{' '}
           </p>
           <div className="wrapper2">
@@ -121,7 +115,6 @@ const OTP = () => {
               {loading ? 'Verifying User...' : 'Verify Account'}
             </button>
             {error && <p className="error1">{error}</p>}
-            {showRegisterSuccess?<Delete/>:""}
           </div>
         </div>
         <button className="resend" disabled={loading2 || otpTimer} onClick={resendOTP}>
@@ -132,4 +125,4 @@ const OTP = () => {
   );
 };
 
-export default OTP;
+export default ResetPW;
