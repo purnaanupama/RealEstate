@@ -3,39 +3,15 @@ const bcryptjs= require('bcryptjs');
 const errorHandler = require('../utils/error');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const speakeasy = require('speakeasy');
 const sendEmail = require('../utils/sendEmail')
+const otp_functions = require('../utils/otpSystem')
 //config dotenv
 dotenv.config();
-
-//code to generate an OTP
-const verifyOtp = function verifyOtp(token){
-  let verified = speakeasy.totp.verifyDelta({
-      secret: process.env.OTP_KEY,
-      encoding: 'base32',
-      token: token,
-      step: 30,
-      window: 4
-  });
-  return verified;
-}
-
-//code to verify an OTP sent through email
-const generateOtp = function generateOtp() {
-  let token = speakeasy.totp({
-      secret: process.env.OTP_KEY,
-      encoding: 'base32',
-      digits: 6,
-      step: 30,
-      window: 4
-  });
-  return token;
-}
 
 exports.accountVerify = async (req, res, next) => {
   const { otp } = req.body;
   // Verify the OTP token
-  const isValid = verifyOtp(otp);
+  const isValid = otp_functions.verifyOtp(otp);
   if (isValid) {
       // Find the user by OTP code
       const user = await User.findOne({ otp_code: otp });
@@ -67,7 +43,7 @@ exports.register = async (req, res, next) => {
   //object destructuring
   const { username, email, password, role } = req.body;
   //generate temp secret
-  const otp = generateOtp();
+  const otp = otp_functions.generateOtp();
   //check if the user is existing without a verification
   const existingUser = await User.findOne({email});
   
@@ -293,7 +269,7 @@ exports.handleReset=async(req,res,next)=>{
   const user = await User.findOne({email})
   try {
     if(user){
-    const otp = generateOtp();
+    const otp = otp_functions.generateOtp();
     const result = await sendEmail.sendEmail(email,otp)
       if(result==='success'){
       res.status(200).json({

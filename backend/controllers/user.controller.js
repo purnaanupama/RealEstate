@@ -1,127 +1,50 @@
 const bcryptjs = require('bcryptjs');
 const User = require('../models/user.model');
 const errorHandler = require('../utils/error');
-const nodemailer = require('nodemailer');
-const speakeasy = require('speakeasy');
-
-
-//verify otp code
-const verifyOtp = function verifyOtp(token){
-    let verified = speakeasy.totp.verifyDelta({
-        secret: process.env.OTP_KEY,
-        encoding: 'base32',
-        token: token,
-        step: 30,
-        window: 4
-    });
-    return verified;
-  }
-
-//generate otp code
-  const generateOtp = function generateOtp() {
-    let token = speakeasy.totp({
-        secret: process.env.OTP_KEY,
-        encoding: 'base32',
-        digits: 6,
-        step: 30,
-        window: 4
-    });
-    return token;
-  }
+const sendEmail = require('../utils/sendEmail')
+const otp_functions = require('../utils/otpSystem')
 
 exports.resendOTP = async(req,res,next)=>{
     const { username, email, password, newEmail } = req.body;
     //generate temp secret
-    const otp = generateOtp();
+    const otp = otp_functions.generateOtp();
     //find current user data from database
     const user = await User.findOne({email});
      // Create a transporter using SMTP
      if(user){
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false, // use TLS
-            auth: {
-                user: 'anupamahera2022@gmail.com',
-                pass: 'ksfbiqywsbxnjwhm'
-            },
-            tls: {
-                // do not fail on invalid certs
-                rejectUnauthorized: false
-            }
-        });
-      
-        // Send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: 'anupamahera2022@gmail.com', // sender address
-            to: newEmail, // recipient email address
-            subject: 'HERE IS YOUR OTP CODE TO SUCCESSFULLY REGISTER TO ESTATE-EASE', // subject line
-            text: `Your OTP code is: ${otp}`, // plain text body
-            html: `<b>Your OTP code is: ${otp}</b>` // html body
-        });
-      
-        if(info.messageId){
-          console.log('Message sent: %s', info.messageId);
-        } else {
-          console.log("Failed");
-        }
-         // Mark the user as verified
-         user.otp_code = otp;
-         await   user.save();
-      
-        // Send success response after email sending is completed
-        res.status(201).json({
-            status: 'success',
-            otp:otp
-        }); 
-     }else{
-        console.log("user not found !");
-     }
-    
-}
+        const result = await sendEmail.sendEmail(email,otp)
+        if(result==='success'){
+        console.log("email sent to " + email);
+        // Mark the user as verified
+        user.otp_code = otp;
+        await  user.save();
+       // Send success response after email sending is completed
+       res.status(201).json({
+        status: 'success',
+        otp:otp
+    }); 
+    return;  
+  }else{
+    return console.log("email not sent !");
+  }    
+}    }
 
 exports.updateUser = async(req,res,next)=>{
   if(req.user.id !== req.params.id) return next(errorHandler(401,"you can only update your own account !"))
     const currentUser = await User.findOne({_id:req.user.id});
     const user = await User.findOne({email:req.body.email});
-
+    const email = req.body.email;
     if(!user){
-      //generate and send otp
-    const otp = generateOtp();
-         // Create a transporter using SMTP
-    let transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // use TLS
-        auth: {
-            user: 'anupamahera2022@gmail.com',
-            pass: 'ksfbiqywsbxnjwhm'
-        },
-        tls: {
-            // do not fail on invalid certs
-            rejectUnauthorized: false
-        }
-    });
-
-  
-    // Send mail with defined transport object
-    let info = await transporter.sendMail({
-        from: 'anupamahera2022@gmail.com', // sender address
-        to: req.body.email, // recipient email address
-        subject: 'HERE IS YOUR OTP CODE TO SUCCESSFULLY REGISTER TO ESTATE-EASE', // subject line
-        text: `Your OTP code is: ${otp}`, // plain text body
-        html: `<b>Your OTP code is: ${otp}</b>` // html body
-    });
-  
-    if(info.messageId){
-      console.log('Message sent: %s', info.messageId);
-    } else {
-      console.log("Failed");
-    }
-        // Update OTP
+    //generate and send otp
+    const otp = otp_functions.generateOtp();
+    const result = await sendEmail.sendEmail(email,otp)
+    // Update OTP
+    if(result==='success'){
         currentUser.otp_code = otp;
         await currentUser.save();
-
+    }else{
+        return console.log("Email not sent !");
+    }
     //update details except email
     try{
         if(req.body.password){
@@ -142,12 +65,9 @@ exports.updateUser = async(req,res,next)=>{
     }catch(error){
         next(error)  
     }
-    
     return; 
     }
-
     //if user is not trying to update the email
-    
     try {
        if(req.body.password){
         req.body.password = bcryptjs.hashSync(req.body.password, 10)
@@ -168,7 +88,7 @@ exports.updateUser = async(req,res,next)=>{
 
 exports.updateEmail = async(req,res,next)=>{
    const {otp,email} = req.body;
-   const isValid = verifyOtp(otp.otp);
+   const isValid = otp_functions.verifyOtp(otp.otp);
    if(isValid){
     try{
         const user = await User.findOne({otp_code:otp.otp})
@@ -203,12 +123,12 @@ exports.updateEmail = async(req,res,next)=>{
   
 
 
-   exports.deleteUser = async (req, res, next) => {
+exports.deleteUser = async (req, res, next) => {
     const { email, pass } = req.body; // Use 'confirmPass' to match the request body
     if (req.user.id !== req.params.id) {
         return next(errorHandler(401, 'Cannot Delete Account'));
     }
-  console.log(pass.confirmPass);
+   console.log(pass.confirmPass);
     try {
         const currentUser = await User.findOne({ email });
 

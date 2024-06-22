@@ -10,5 +10,4 @@ router.post('/update/:id',verifyToken,userController.updateUser)
 router.delete('/delete/:id',verifyToken,userController.deleteUser)
 router.patch('/updateEmail',verifyToken,userController.updateEmail)
 
-
 module.exports =  router;
