@@ -1,9 +1,12 @@
 .list-creator h1{
-    width: 100%;
     text-align: center;
     margin: 50px;
     height: 100%;
 }
+.list-creator{
+   margin: 30px; 
+}
+
 .list-creator .list-form{
     width: 100%;
     height: 700px;
@@ -31,6 +34,7 @@
     height: 100%;
     width: 50%;
     padding: 30px;
+    border: 10px solid rgb(46, 46, 67);
     background-color: rgb(245, 239, 250);
 }
 .left input{
@@ -58,11 +62,129 @@
     width: 100%;
 }
 .regular-price{
-    width: 175px;
+    width: 130px;
     margin-left: 12px;
-
 }
 .rp{
     color: white;
     font-size: 14px;
+   display: flex;
+}
+.uploadFile{
+    display: flex;
+    padding-top: 20px;
+    gap: 30px;
+}
+.uploadFile button{
+    border: 1px solid green;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: green;
+    cursor: pointer;
+}
+.uploadFile button:disabled{
+    background-color: rgb(6, 169, 6);
+    color:white;
+}
+.uploadFile button:hover{
+    background-color: green;
+    color:white;
+}
+.uploadFile input{
+    border: 1px solid green;
+    padding: 15px 15px;
+    border-radius: 5px;
+    color: green;
+}
+.create{
+    padding: 15px 15px;
+    margin-top: 30px;
+    border-radius: 5px;
+    width: 70%;
+    border: none;
+    background-color: rgb(46, 46, 67);
+    color: aliceblue;
+    cursor: pointer;
+}
+.create:hover{
+    background-color: rgb(52, 52, 109);
+}
+.listingImages img{
+    object-fit: cover;
+}
+.listingImages{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    max-width: 600px;
+    height: 350px;
+    background: rgb(167, 167, 210);
+    border-radius: 5px;
+    margin-top: 30px;
+    position: relative;
+    overflow-x: scroll;
+}
+.listingImages .imageWrapper{
+padding: 10px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.listingImages {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    max-width: 600px;
+    height: 350px;
+    background: rgb(193, 193, 232);
+    border-radius: 5px;
+    margin-top: 30px;
+    position: relative;
+    overflow-x: scroll;
+}
+.listingImages .imageWrapper button{
+    padding: 5px 8px;
+    width: 100px;
+    border: 1px solid rgb(193, 5, 5);
+    color: rgb(193, 5, 5);
+    cursor: pointer;
+    border-radius: 3px;
+}
+.listingImages .imageWrapper button:hover{
+    background: rgb(193, 5, 5);
+    color: white;
+}
+.listingImages::-webkit-scrollbar {
+    width: 10px;
+    height: 15px; /* Horizontal scrollbar height */
+}
+
+.listingImages::-webkit-scrollbar-track {
+    background: #9085dd; /* Scrollbar track color */
+    border-radius: 5px;
+}
+
+.listingImages::-webkit-scrollbar-thumb {
+    background: #261f4e; /* Scrollbar thumb color */
+    border-radius: 5px;
+    border: 2px solid #9085dd;
+}
+
+.listingImages::-webkit-scrollbar-thumb:hover {
+    background: #270e3a; /* Scrollbar thumb hover color */
+}
+
+@media only screen and (max-width: 650px){
+    .list-creator .list-form{
+        flex-direction: column;
+    }
+    .list-creator{
+        margin: 20px;
+    }
+    .left{
+        width: 100%;
+    }
+    .right{
+        width: 100%;
+    }
 }
