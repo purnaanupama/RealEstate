@@ -9,5 +9,6 @@ router.post('/resend-otp',userController.resendOTP)
 router.post('/update/:id',verifyToken,userController.updateUser)
 router.delete('/delete/:id',verifyToken,userController.deleteUser)
 router.patch('/updateEmail',verifyToken,userController.updateEmail)
+router.get('/listings/:id',verifyToken,userController.getUserListings)
 
 module.exports =  router;
