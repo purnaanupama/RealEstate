@@ -2,14 +2,31 @@ import '../css/createListing.css'
 import { useState } from 'react'
 import {getStorage, uploadBytesResumable,ref, getDownloadURL} from 'firebase/storage'
 import {app} from '../../firebase'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const CreateListing = () => {
   const [files,setFiles]=useState([])
   const [formData,setFormData] =useState({
     imageUrls:[],
-  })
+    name:'',
+    description:'',
+    address:'',
+    type:'rent',
+    bedrooms:1,
+    bathrooms:1,
+    regularPrice:5000,
+    discountPrice:0,
+    offers:false,
+    parking:false,
+    furnished:false
+  });
   const [imageUploadError,setImageUploadError]=useState(false);
   const [uploading,setUploading] = useState(false);
+  const [error,setError] = useState(false);
+  const [loading,setLoading]=useState(false);
+  const {currentUser}=useSelector(state=>state.user);
+  const navigate = useNavigate();
 
   console.log(formData);
   const handleImageSubmit = () => {
@@ -63,44 +80,148 @@ const CreateListing = () => {
       imageUrls:formData.imageUrls.filter((_,i)=>i!==index)
     })
   }
+  const handleChange=(e)=>{
+    if(e.target.id==='sale' || e.target.id==='rent'){
+      setFormData({
+        ...formData,
+        type:e.target.id
+      })
+    }
+    if(e.target.id==='parking'||e.target.id==='furnished'||e.target.id==='offers'){
+      setFormData({
+        ...formData,
+        [e.target.id]:e.target.checked
+      })
+    }
+    if(e.target.type==='number'||e.target.type==='text'||e.target.type==='textarea'){
+      setFormData({
+        ...formData,
+        [e.target.id]:e.target.value
+      })
+    }
+  }
+  const handleSubmit=async(e)=>{
+ e.preventDefault();
+ try {
+  if(formData.imageUrls.length < 1)return setError('You must upload atleast one image');
+  if(+formData.regularPrice < +formData.discountPrice)return setError('Discount price must be lower than regular price')
+  setLoading(true);
+  setError(false);
+  const res = await fetch('/api/listing/create',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      ...formData,
+      userRef:currentUser._id
+    }),
+  });
+  const data = await res.json();
+  setLoading(false);
+  if(data.status==='fail'){
+    setError(data.message)
+    console.log(data);
+    return;
+  }
+  navigate(`/listing/${data._id}`)
+ } catch (error) {
+  setError(error)
+  setLoading(false);
+ }
+  }
   return (
     <div className='list-creator'>
         <h1>Create Listing</h1>
          <form className='list-form'>
           <div className="left">
-           <input type="text" name="" id="name" placeholder='Enter Name'/>
-           <textarea name="" id="description" placeholder="decription..."/>
-           <input type="text" name="" id="name" placeholder="Enter Address"
-            maxLength="500"/>
+           <input type="text" name="" id="name" placeholder='Enter Name' onChange={handleChange} value={formData.name}/>
+           <textarea name="" id="description" placeholder="decription..." onChange={handleChange} value={formData.description}/>
+           <input type="text" name="" id="address" placeholder="Enter Address"
+            maxLength="500" onChange={handleChange} value={formData.address}/>
             <div className='checkbox'>
             <label>
                 For Sale
-                <input type="checkbox"/>
+                <input type="checkbox"  
+                id='sale' 
+                onChange={handleChange}
+                checked={formData.type==='sale'}
+                />
             </label>
             <label>
             For Rent
-                <input type="checkbox"/>
+                <input type="checkbox" 
+                id='rent'
+                onChange={handleChange}
+                checked={formData.type==='rent'}/>
             </label>
             <label>
             Parking
-                <input type="checkbox"/>
+                <input type="checkbox" 
+                id='parking'
+                onChange={handleChange}
+                checked={formData.parking}/>
             </label>
             <label>
             Furnished
-                <input type="checkbox"/>
+                <input type="checkbox" 
+                id='furnished'
+                onChange={handleChange}
+                checked={formData.furnished}
+                />
             </label>
             <label>
             Offers
-            <input type="checkbox"/>
+            <input type="checkbox" 
+            id='offers'
+            onChange={handleChange}
+            checked={formData.offer}/>
             </label> 
             </div>
             <div className='set'>
-            <input type="number" name="" id="name" placeholder='No. of Bedrooms'/>
-            <input type="number" name="" id="name" placeholder='No. of Bathrooms'/>
+            <input 
+            type="number" 
+            name="" 
+            id="bedrooms" 
+            placeholder='No. of Bedrooms'
+            onChange={handleChange}
+            value={formData.bedrooms}
+            />
+            <input 
+            type="number" 
+            name="" 
+            id="bathrooms" 
+            placeholder='No. of Bathrooms'
+            onChange={handleChange}
+            value={formData.bathrooms}
+            />
             </div>
             <label className='rp'>Regular Price ($/month)
-            <input className='regular-price' type="number" name="" id="name" defaultValue={0}/>
+            <input 
+            className='regular-price'
+            min={250}
+            max={100000}
+            type="number" 
+            name="" 
+            id="regularPrice" 
+            defaultValue={0}
+            onChange={handleChange}
+            value={formData.regularPrice}/>
             </label>
+            {formData.offers && 
+             <label className='rp'>Discount Price ($/month)
+             <input 
+             className='regular-price'
+             min={0}
+             max={100000}
+             type="number" 
+             name="" 
+             id="discountPrice" 
+             defaultValue={0}
+             onChange={handleChange}
+             value={formData.discountPrice}/>
+             </label>
+            }
            
           </div>
        
@@ -119,8 +240,8 @@ const CreateListing = () => {
               </div>
             ))}
            </div>
-           <button className='create'>Create Listing</button>
-         
+           <button className='create' disabled={loading || uploading} onClick={handleSubmit}>{loading ? 'Creating...':'Create Listing'}</button>
+          {error && <p className='error'>{error}</p>}
           </div>
          </form>
     </div>

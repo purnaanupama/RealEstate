@@ -106,6 +106,9 @@
     color: aliceblue;
     cursor: pointer;
 }
+.create:disabled{
+    background-color: rgb(60, 60, 84);
+}
 .create:hover{
     background-color: rgb(52, 52, 109);
 }
@@ -140,7 +143,7 @@ gap: 10px;
     border-radius: 5px;
     margin-top: 30px;
     position: relative;
-    overflow-x: scroll;
+    overflow: auto;
 }
 .listingImages .imageWrapper button{
     padding: 5px 8px;
@@ -161,12 +164,12 @@ gap: 10px;
 
 .listingImages::-webkit-scrollbar-track {
     background: #9085dd; /* Scrollbar track color */
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .listingImages::-webkit-scrollbar-thumb {
     background: #261f4e; /* Scrollbar thumb color */
-    border-radius: 5px;
+    border-radius: 10px;
     border: 2px solid #9085dd;
 }
 
