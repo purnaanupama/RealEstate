@@ -27,6 +27,7 @@ const Profile = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [updateSuccess,setUpdateSuccess] = useState(false);
   const [showDelete,setShowDelete] = useState("");
+  const [listings,setListings]=useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -208,6 +209,36 @@ const Profile = () => {
  const handleConfirmBox =(state)=>{
     setShowConfirmBox(state);
  }
+ const handleShowListings=async()=>{
+  try {
+    setError1(false)
+    const res = await fetch(`/api/user/listings/${currentUser._id}`);
+    const data = await res.json();
+    if(data.status==='fail'){
+      setError1(true);
+      console.log("collecteda");
+      return
+    }
+    setListings(data);
+  } catch (error) {
+    setError1(true)
+  }
+ }
+ const handleListingDelete=async(listingId)=>{
+     try {
+      const response =await fetch(`/api/listing/delete/${listingId}`,{
+        method:'DELETE',
+     })
+     const data = await response.json();
+     if(data.success === false){
+      console.log(data.message);
+      return;
+     }
+     setListings(prev=>prev.filter(item=>item._id !== listingId))
+     } catch (error) {
+      console.log(error.message);
+     }
+ }
 
   return (
     <div className='profile'>
@@ -259,10 +290,32 @@ const Profile = () => {
         <p onClick={()=>{setShowConfirmBox(true)}}>Delete Account</p>
         <p onClick={handleSignOut}>Sign Out</p>
       </div>
-      
-    
        {showDeleteSuccess?<Delete word={showDelete}/>:''}
-      {showConfirmBox?<CP handleConfirmBox={handleConfirmBox} handleDelete={handleDeleteAccount} handlePassChange={handlePasswordChange}/>:''}
+       {showConfirmBox?<CP handleConfirmBox={handleConfirmBox} handleDelete={handleDeleteAccount} handlePassChange={handlePasswordChange}/>:''}
+       <button onClick={handleShowListings} type='button' className='showListings'>Show My Listings</button>
+       {error1?<p style={{color:'#C20C06',border:'1px solid #C20C06',padding:'15px 30px',marginTop:'20px',borderRadius:'5px', background:'#FAD9D8',maxWidth: '400px'}}>{error1?'Error showing listings':''}</p>:""}
+       <div className='listCartWrapper'>
+       {listings.length > 0 && <h3 style={{color:'#5f6188',paddingBottom:'20px',fontWeight:'500'}}>Your Listings</h3>}
+       {listings && listings.length > 0 && 
+        listings.map((listing)=>{
+          return(
+            <div className='listingCard' key={listing._id}>
+              <Link className='listingLink' to={`/listing/${listing._id}`}>
+              <div className="listingWrapper">
+              <img src={listing.imageUrls[0]} alt="image"/>
+              <p>{listing.name}</p>
+              </div>
+              </Link>
+              <div className="listingButtons">
+                <button>Edit</button> 
+                <button onClick={()=>handleListingDelete(listing._id)}>Delete</button>
+              </div>
+            </div>
+          )
+        })
+       }
+       </div>
+      
     </div>
   )
 }
