@@ -14,6 +14,8 @@ import GPW from './components/givePassword';
 import ResetPW from './pages/otp-reset-password';
 import RPW from './components/resetPassword';
 import UpdateListing from './pages/UpdateListing';
+import Listing from './pages/Listing';
+
 
 
 const App = () => {
@@ -30,6 +32,7 @@ const App = () => {
       <Route path='/sign-in' element={<Signin />} />
       <Route path='/about' element={<About />} />
       <Route path='/sign-up' element={<Signup />} />
+      <Route path='/listing/:ListingId' element={<Listing />} />
       <Route element={<PrivateRoute/>}>
       <Route path='/profile' element={<Profile />} />
       <Route path='/create-listing' element={<CreateListing/>} />

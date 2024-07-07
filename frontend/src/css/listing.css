@@ -1,0 +1,26 @@
+main .loading{
+    font-size: 27px;
+    width: 100%;
+    font-weight: 600;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(1, 1, 1, 0.6);
+  color: rgb(207, 206, 206);
+  height: 200px;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  text-align: center;
+  font-size: 16px; /* Adjust as needed */
+}
