@@ -13,6 +13,8 @@ import CreateListing from './pages/CreateListing';
 import GPW from './components/givePassword';
 import ResetPW from './pages/otp-reset-password';
 import RPW from './components/resetPassword';
+import UpdateListing from './pages/UpdateListing';
+
 
 const App = () => {
   return (
@@ -31,6 +33,7 @@ const App = () => {
       <Route element={<PrivateRoute/>}>
       <Route path='/profile' element={<Profile />} />
       <Route path='/create-listing' element={<CreateListing/>} />
+      <Route path='/update-listing/:ListingId' element={<UpdateListing/>} />
       </Route>
      </Routes>
     </BrowserRouter>

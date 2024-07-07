@@ -307,8 +307,10 @@ const Profile = () => {
               </div>
               </Link>
               <div className="listingButtons">
-                <button>Edit</button> 
-                <button onClick={()=>handleListingDelete(listing._id)}>Delete</button>
+              <Link to={`/update-listing/${listing._id}`}>
+              <button>Edit</button>
+              </Link>
+              <button onClick={()=>handleListingDelete(listing._id)}>Delete</button>
               </div>
             </div>
           )
