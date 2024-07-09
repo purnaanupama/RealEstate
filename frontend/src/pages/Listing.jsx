@@ -91,6 +91,7 @@ const Listing = () => {
               {listing.furnished &&<p><FaCouch style={{ color: 'green',fontSize:'20px' }} />Furnished</p>}
             </div>
           </div>
+          Contact landlord
         </div>
       )}
     </div>
