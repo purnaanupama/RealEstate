@@ -91,3 +91,17 @@ main .loading{
   font-weight: 600;
   color: rgb(0, 141, 52);
 }
+.contactOwner{
+  background:rgb(59, 59, 116);
+  padding: 10px 12px;
+  color: aliceblue;
+  margin-left: 95px;
+  width: 500px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+.contactOwner:hover{
+  background:rgb(77, 77, 143);
+}
