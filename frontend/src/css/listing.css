@@ -105,3 +105,23 @@ main .loading{
 .contactOwner:hover{
   background:rgb(77, 77, 143);
 }
+.emailContent{
+  margin-left: 95px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.sendEmailButton{
+  padding: 5px 10px;
+  background-color: rgb(84, 84, 147);
+  text-decoration: none;
+  color: rgb(231, 227, 248);
+  margin-top: 15px;
+  width: 200px;
+  text-align: center;
+  border-radius: 3px;
+  font-size: 14px;
+}
+.sendEmailButton:hover{
+  background-color: rgb(37, 37, 86);
+}

@@ -10,13 +10,18 @@ import { FaBed } from 'react-icons/fa';
 import { FaParking } from 'react-icons/fa';
 import { FaCouch } from 'react-icons/fa';
 import { FaSink } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import Contact from '../components/Contact';
+
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [contact, setContact] = useState(false);
   const params = useParams();
+  const {currentUser} = useSelector(state=>state.user)
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -91,7 +96,10 @@ const Listing = () => {
               {listing.furnished &&<p><FaCouch style={{ color: 'green',fontSize:'20px' }} />Furnished</p>}
             </div>
           </div>
-          <button className='contactOwner'>Contact landowner</button>
+          {!contact && currentUser && listing.userRef !== currentUser._id && (
+               <button onClick={()=>{setContact(true)}} className='contactOwner'>Contact landowner</button>
+          )}
+          {contact&& <Contact listing={listing}/>}
         </div>
       )}
     </div>
