@@ -246,6 +246,7 @@ const Profile = () => {
 
       <form onSubmit={handleSubmit} className='form1'>
         <input
+          className='profileInput'
           onChange={handleFileChange}
           type='file'
           ref={fileRef}

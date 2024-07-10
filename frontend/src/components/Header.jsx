@@ -34,7 +34,7 @@ const Header = () => {
         </h1>
         </Link>
       
-        <form onSubmit={handleSubmit}>
+        <form className='form5' onSubmit={handleSubmit}>
           <button type='submit' style={{border:'none',background:'none',display:'flex',cursor:'pointer'}}>
               <FaSearch className='searchIcon'/>
           </button>

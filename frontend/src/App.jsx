@@ -15,6 +15,7 @@ import ResetPW from './pages/otp-reset-password';
 import RPW from './components/resetPassword';
 import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
+import Search from './pages/search';
 
 
 
@@ -28,6 +29,7 @@ const App = () => {
       <Route path='/reset-password' element={<RPW/>}/>
       <Route path='/otp-email-update' element={<OTP2/>}/>
       <Route path='/otp-reset-password' element={<ResetPW/>}/>
+      <Route path='/search' element={<Search/>}/>
       <Route path='/' element={<Home />} />
       <Route path='/sign-in' element={<Signin />} />
       <Route path='/about' element={<About />} />

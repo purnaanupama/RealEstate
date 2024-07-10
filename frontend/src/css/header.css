@@ -20,17 +20,17 @@ h1 > .second{
 h1 > .first{
   color: rgb(25, 11, 134);
 }
-form{
+.form5{
     background: white;
     border-radius: 5px;
     width: 250px;
     display: flex;
     align-items: center;
     padding: 8px 14px;
+    box-shadow: 1px 1px 4px 2px rgba(1,1,1,0.2);
 }
-form > input{
+.form5 > input{
     border: none;
-
     background: transparent;
     outline: none;
 }
@@ -79,14 +79,14 @@ form > input{
     .menu li:nth-child(2){
         display: none;
     }
-    form{
+    .form5{
         width: 200px;
         padding: 6px 12px;
     }
     .logo{
         font-size: 25px;
     }
-    form > input{
+    .form5 > input{
         width: 50px;
     }
     .menu li{
