@@ -1,7 +1,7 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {FaSearch} from 'react-icons/fa'
 import '../css/header.css';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 
 const Header = () => {
@@ -9,6 +9,21 @@ const Header = () => {
 //state=>state.user recieves the entire redux store state and we can acess the currently logged in user
   const {currentUser} = useSelector(state=>state.user)
   const [searchTerm,setSearchTerm] = useState('')
+  const navigate = useNavigate();
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('searchItem',searchTerm)
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`)
+  }
+  useEffect(()=>{
+      const urlParams = new URLSearchParams(location.search)
+      const searchItemFromUrl = urlParams.get('searchItem');
+      if(searchItemFromUrl){
+        setSearchTerm(searchItemFromUrl)
+      }
+  },[location.search])
   return (
     <header>
         <div className="Header-container">
