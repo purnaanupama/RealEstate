@@ -74,7 +74,7 @@ exports.getListings=async(req,res,next)=>{
       }
 
       let parking = req.query.parking;
-      if(parking === undefined||parking === 'false'){
+      if(parking === undefined){
         parking = {$in:[false,true]}
       }
 

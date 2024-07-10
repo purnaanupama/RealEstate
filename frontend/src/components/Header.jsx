@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState} from 'react'
 import {FaSearch} from 'react-icons/fa'
 import '../css/header.css';
 import {Link} from 'react-router-dom'
@@ -8,6 +8,7 @@ const Header = () => {
 //useSelector is used to access the current state of redux store 
 //state=>state.user recieves the entire redux store state and we can acess the currently logged in user
   const {currentUser} = useSelector(state=>state.user)
+  const [searchTerm,setSearchTerm] = useState('')
   return (
     <header>
         <div className="Header-container">
@@ -18,9 +19,15 @@ const Header = () => {
         </h1>
         </Link>
       
-        <form>
-            <FaSearch className='searchIcon'/>
-            <input type="text" placeholder='Search...'/>
+        <form onSubmit={handleSubmit}>
+          <button type='submit' style={{border:'none',background:'none',display:'flex',cursor:'pointer'}}>
+              <FaSearch className='searchIcon'/>
+          </button>
+            <input type="text" 
+                   placeholder='Search...'
+                   value={searchTerm}
+                   onChange={(e)=>setSearchTerm(e.target.value)}
+                   />
         </form>
         <ul className='menu'>
         <Link className='link' to='/'>
