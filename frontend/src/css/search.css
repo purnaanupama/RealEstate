@@ -10,6 +10,13 @@
     margin-top: 40px;
     width: 400px;
 }
+.noValues{
+   text-align: center;
+   padding: 60px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
 .searchBar2 input{
     width: 100%;
     border-radius: 5px;

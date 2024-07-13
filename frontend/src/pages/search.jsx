@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react'
 import '../css/search.css'
 import {useNavigate} from 'react-router-dom'
+import ListingCard from '../components/ListingCard'
+
 
 const Search = () => {
   const navigate = useNavigate()
@@ -39,12 +41,17 @@ const Search = () => {
       })    
     }
     const fetchListings = async()=>{
+      try {
       setLoading(true)
       const query = urlParams.toString();
       const response= await fetch(`/api/listing/get?${query}`)
       const data = await response.json();
         setListings(data)
         setLoading(false)
+      } catch (error) {
+        console.log(error);
+        setLoading(false)
+      }
       }
     fetchListings();  
   },[location.search])
@@ -153,6 +160,14 @@ const Search = () => {
         </div> 
         <div className="rightSide">
            <h2>Listing results :</h2>
+           {loading &&<p style={{padding:'50px'}}>Loading Data...</p>}
+           {!loading && listings.length < 1 &&<p className='noValues'>No Results Found...</p>}
+           <div className="cardsContainer"  style={{display:'flex',flexWrap:'wrap',padding:'40px',gap:'30px',alignItems:'center',justifyContent:'center'}} >
+           {!loading && listings && listings.map((listing)=>{
+                return <ListingCard key={listing._id} Listing={listing}/>
+           })}
+           </div>
+        
         </div>
     </div>
   )

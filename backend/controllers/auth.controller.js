@@ -100,33 +100,44 @@ exports.register = async (req, res, next) => {
   }
  };
 
-exports.signin = async(req,res,next)=>{
-   const {email,password}=req.body
-   try{
-   //check if email exist
-   const validUser = await User.findOne({email}) //go to database and find if user exist with email we got from req.body
-   //If any field is empty 
-   if(!email || !password) return next(errorHandler(400,'All fields are required !'))
-   //If user not verified or does not exist
-   if(!validUser || !validUser.verified_user) return next(errorHandler(404,'User not found !'));
-   const validPassword = bcryptjs.compareSync(password,validUser.password);
-   //If user provide wrong credentials
-   if(!validPassword) return next(errorHandler(401,'Wrong credentials !'))
-  
-  //if validations passed create web token
-   const token = jwt.sign({id:validUser._id},process.env.JWT_SECRET,{
-    expiresIn:'1d'
-   });
-   //store all data except password inside validUser
-   const {__v,password:pass,...restOfData} = validUser._doc
-  //store created token inside cookie
-  res.cookie('access_token',token,{httpOnly:true})
-  .status(200)
-  .json(restOfData);
-   }catch(error){
-    next(error)
-   }
-}
+ exports.signin = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    // Check if email exists
+    const validUser = await User.findOne({ email });
+    
+    // If any field is empty 
+    if (!email || !password) return next(errorHandler(400, 'All fields are required!'));
+    
+    // If user not verified or does not exist
+    if (!validUser || !validUser.verified_user) return next(errorHandler(404, 'User not found!'));
+
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
+    
+    // If user provides wrong credentials
+    if (!validPassword) return next(errorHandler(401, 'Wrong credentials!'));
+
+    // If validations passed, create web token
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
+      expiresIn: '1d'
+    });
+
+    // Decode token to check expiration
+    const decodedToken = jwt.decode(token);
+    console.log('Token issued at:', new Date(decodedToken.iat * 1000));
+    console.log('Token expires at:', new Date(decodedToken.exp * 1000));
+
+    // Store all data except password inside validUser
+    const { __v, password: pass, ...restOfData } = validUser._doc;
+    
+    // Store created token inside cookie
+    res.cookie('access_token', token, { httpOnly: true })
+      .status(200)
+      .json(restOfData);
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.givePassword = async (req, res, next) => {
   const { data, email, currentEmail } = req.body;

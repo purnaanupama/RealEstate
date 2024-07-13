@@ -78,12 +78,12 @@ const Listing = () => {
           <div className="DetailWrapper">
             <h2 className='houseName'>
               {listing.name}&nbsp;&nbsp;
-              {listing.type==='rent'&&<span className='spanPrice'>{`$ ${listing.regularPrice} /month`}</span>}
-              {listing.type==='sale'&&<span className='spanPrice'>{`$ ${listing.regularPrice}`}</span>}
+              {listing.type==='rent'&&<span className='spanPrice'>{`$ ${listing.regularPrice.toLocaleString('en-US')} /month`}</span>}
+              {listing.type==='sale'&&<span className='spanPrice'>{`$ ${listing.regularPrice.toLocaleString('en-US')}`}</span>}
            </h2>
             <p className='houseAddress'><FaMapMarkerAlt style={{ color: 'green',fontSize:'20px' }} />&nbsp;&nbsp;{listing.address}</p>
             <div className="specialDetails">
-            {listing.discountPrice > 0?<p>Discount ${listing.discountPrice}</p>:<p>No Discount</p>}
+            {listing.discountPrice > 0?<p>Discount ${listing.discountPrice.toLocaleString('en-US')}</p>:<p>No Discount</p>}
             {<p>For {listing.type}</p>}
             </div>
             <div className="houseDescription">
