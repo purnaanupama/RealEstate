@@ -20,15 +20,21 @@
 }
 .mainContainer{
     display: flex;
+    padding-top: 60px;
 }
 .leftSide{
     border-right: 1px solid rgb(231, 228, 228);
     height: 100vh;
     overflow: hidden;
+    position: fixed;
+    width: 400px;
 }
 .rightSide h2{
    padding-top: 40px;
    padding-left: 50px;
+}
+.rightSide{
+    margin-left: 400px;
 }
 .filters{
     height: 370px;

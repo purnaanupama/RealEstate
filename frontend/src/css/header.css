@@ -6,6 +6,7 @@
     font-style: normal;
 }
 .Header-container{
+    position: fixed;
     width: 100%;
     background: rgb(215, 223, 240);
     display: flex;

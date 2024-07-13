@@ -12,9 +12,10 @@ import CP from '../components/confirmPassword.jsx'
 const Profile = () => {
   const { currentUser,loading,error } = useSelector((state) => state.user)
   const fileRef = useRef(null)
-  const[error1,setError1] = useState(false)
+  const [error1,setError1] = useState(false)
   const [filePerc, setFilePerc] = useState(0)
   const [file, setFile] = useState(undefined)
+  const [noListings, setNoListings] = useState(false)
   const [fileUploadError, setFileUploadError] = useState(false)
   const [showDeleteSuccess,setShowDeleteSuccess]=useState(false);
   const [showConfirmBox,setShowConfirmBox]=useState(false);
@@ -27,6 +28,7 @@ const Profile = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [updateSuccess,setUpdateSuccess] = useState(false);
   const [showDelete,setShowDelete] = useState("");
+  const [listingLoading,setListingLoading] = useState(false);
   const [listings,setListings]=useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -212,16 +214,27 @@ const Profile = () => {
  const handleShowListings=async()=>{
   try {
     setError1(false)
+    setListingLoading(true)
     const res = await fetch(`/api/user/listings/${currentUser._id}`);
     const data = await res.json();
+    if(data.length<1){
+      setListingLoading(false)
+      setNoListings(true)
+      return
+    }
     if(data.status==='fail'){
+      setNoListings(false)
+      setListingLoading(false)
       setError1(true);
       console.log("collecteda");
       return
     }
+    setListingLoading(false)
     setListings(data);
+    setNoListings(false)
   } catch (error) {
     setError1(true)
+    setListingLoading(false)
   }
  }
  const handleListingDelete=async(listingId)=>{
@@ -242,8 +255,8 @@ const Profile = () => {
 
   return (
     <div className='profile'>
-      <h1 className='superTitle'>User Profile</h1>
-
+      <div className="profileLeft">
+      <h2 className='superTitle'>Welcome, {currentUser.username} {`(${currentUser.role})`}</h2>
       <form onSubmit={handleSubmit} className='form1'>
         <input
           className='profileInput'
@@ -261,18 +274,7 @@ const Profile = () => {
           src={currentUser.avatar}
           alt='profile_image'
         />
-        <p>
-          {fileUploadError ? (
-            <span style={{ color: 'red' }}>Error Uploading Image</span>
-          ) : filePerc > 0 && filePerc < 100 ? (
-            <span style={{ color: 'green',textAlign:'center'}}>{`Uploading ${filePerc}%`}</span>
-          ) : filePerc === 100 && isVisible ? (
-            <span style={{ color: 'green' }}>Upload Complete</span>
-          ) : (
-            ''
-          )}
-        </p>
-        <h3>{currentUser?currentUser.role.toUpperCase():''}</h3>
+
         <input type='text' placeholder='username' defaultValue={currentUser.username} className='text2' id='username' onChange={handleChange}/>
         <input type='email' placeholder='email' className='text3' id='email' defaultValue={currentUser.email} onChange={handleChange}/>
         {currentUser.type === 'google'?"":
@@ -284,17 +286,43 @@ const Profile = () => {
         <Link to={"/create-listing"}>
           <button className='createListing'>Create Listing</button>
         </Link>
-      </form>
-      {updateSuccess ?<p className='successMsg' style={{color:'rgb(15, 132, 87)',border:'1px solid green',padding:'15px 30px', marginTop:'20px',borderRadius:'5px', background:'#D2F9D6',maxWidth: '400px'}}>Updated Successfully</p>:"" }
-      {error?<p style={{color:'#C20C06',border:'1px solid #C20C06',padding:'15px 30px',marginTop:'20px',borderRadius:'5px', background:'#FAD9D8',maxWidth: '400px'}}>{error}</p>:""}
-      <div className='options'>
+        <div className='options'>
         <p onClick={()=>{setShowConfirmBox(true)}}>Delete Account</p>
         <p onClick={handleSignOut}>Sign Out</p>
       </div>
+      </form>
+      </div>
+     <div className="profileRight">
        {showDeleteSuccess?<Delete word={showDelete}/>:''}
        {showConfirmBox?<CP handleConfirmBox={handleConfirmBox} handleDelete={handleDeleteAccount} handlePassChange={handlePasswordChange}/>:''}
+       <div className="notifications">
+       {
+      fileUploadError ? (
+       <p>
+      <span style={{ color: 'red' }}>Error Uploading Image</span>
+      </p>
+       ) : filePerc > 0 && filePerc < 100 ? (
+      <p>
+      <span style={{ color: 'green', textAlign: 'center' }}>{`Uploading ${filePerc}%`}</span>
+      </p>
+      ) : filePerc === 100 && isVisible ? (
+      <p>
+      <span style={{ color: 'green' }}>Upload Complete</span>
+      </p>
+      ) : (
+      <p></p>
+   )
+}
+      {updateSuccess ?<p className='successMsg' style={{color:'rgb(15, 132, 87)',border:'1px solid green',padding:'15px 30px', marginTop:'20px',borderRadius:'5px', background:'#D2F9D6',width: '100%'}}>Updated Successfully</p>:"" }
+      {error?<p style={{color:'#C20C06',border:'1px solid #C20C06',padding:'15px 30px',marginTop:'20px',borderRadius:'5px', background:'#FAD9D8',width: '100%'}}>{error}</p>:""}
+       </div>
+       
        <button onClick={handleShowListings} type='button' className='showListings'>Show My Listings</button>
-       {error1?<p style={{color:'#C20C06',border:'1px solid #C20C06',padding:'15px 30px',marginTop:'20px',borderRadius:'5px', background:'#FAD9D8',maxWidth: '400px'}}>{error1?'Error showing listings':''}</p>:""}
+       {noListings && <p>You Have not created any listing</p>}
+       {listingLoading && <img src='/assets/loader_listings.gif' alt='loader'/>}
+       {listings.length<1 &&<p style={{background:'#eaedf2',color:'grey',width:'100%',height:'200px',marginTop:'30px',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'10px'}}>Listings you have created will appear in this space</p>}
+       {error1?<p style={{color:'#C20C06',border:'1px solid #C20C06',padding:'15px 30px',marginTop:'20px',borderRadius:'5px', background:'#FAD9D8',width: '100%'}}>{error1?'Error showing listings':''}</p>:""}
+       
        <div className='listCartWrapper'>
        {listings.length > 0 && <h3 style={{color:'#5f6188',paddingBottom:'20px',fontWeight:'500'}}>Your Listings</h3>}
        {listings && listings.length > 0 && 
@@ -318,6 +346,8 @@ const Profile = () => {
         })
        }
        </div>
+     </div>
+      
       
     </div>
   )
