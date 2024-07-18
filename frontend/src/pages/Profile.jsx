@@ -320,7 +320,7 @@ const Profile = () => {
        <button onClick={handleShowListings} type='button' className='showListings'>Show My Listings</button>
        {noListings && <p>You Have not created any listing</p>}
        {listingLoading && <img src='/assets/loader_listings.gif' alt='loader'/>}
-       {listings.length<1 &&<p style={{background:'#eaedf2',color:'grey',width:'100%',height:'200px',marginTop:'30px',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'10px'}}>Listings you have created will appear in this space</p>}
+       {listings.length<1 &&<p className='fillSpace' style={{background:'#eaedf2',color:'grey',width:'100%',height:'200px',marginTop:'30px',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'10px'}}>Listings you have created will appear in this space</p>}
        {error1?<p style={{color:'#C20C06',border:'1px solid #C20C06',padding:'15px 30px',marginTop:'20px',borderRadius:'5px', background:'#FAD9D8',width: '100%'}}>{error1?'Error showing listings':''}</p>:""}
        
        <div className='listCartWrapper'>

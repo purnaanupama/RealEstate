@@ -86,7 +86,7 @@
     cursor: pointer;
 }
 .uploadFile button:disabled{
-    background-color: rgb(6, 169, 6);
+    background-color: rgb(3, 119, 3);
     color:white;
 }
 .uploadFile button:hover{
@@ -118,18 +118,18 @@
 .listingImages img{
     object-fit: cover;
 }
-.listingImages{
+/* .listingImages{
     padding: 10px;
     display: flex;
     flex-direction: row;
     max-width: 600px;
     height: 350px;
-    background: rgb(167, 167, 210);
+    background: rgb(207, 207, 244);
     border-radius: 5px;
     margin-top: 30px;
     position: relative;
     overflow-x: scroll;
-}
+} */
 .listingImages .imageWrapper{
 padding: 10px;
 display: flex;
@@ -142,8 +142,9 @@ gap: 10px;
     flex-direction: row;
     max-width: 600px;
     height: 350px;
-    background: rgb(193, 193, 232);
+    background: rgb(223, 223, 251);
     border-radius: 5px;
+    border: 3px solid rgb(198, 169, 254);
     margin-top: 30px;
     position: relative;
     overflow: auto;
@@ -183,14 +184,19 @@ gap: 10px;
 @media only screen and (max-width: 650px){
     .list-creator .list-form{
         flex-direction: column;
-    }
-    .list-creator{
-        margin: 20px;
+        height: 900px;
     }
     .left{
         width: 100%;
+
     }
     .right{
         width: 100%;
+
     }
+    .list-creator{
+        margin-bottom: 40px; 
+        margin-left: 10px;
+        margin-right: 10px;
+     }
 }

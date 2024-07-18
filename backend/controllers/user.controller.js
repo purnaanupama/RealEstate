@@ -35,6 +35,7 @@ exports.updateUser = async(req,res,next)=>{
     const currentUser = await User.findOne({_id:req.user.id});
     const user = await User.findOne({email:req.body.email});
     const email = req.body.email;
+    if(user && currentUser.email !== user.email) return next(errorHandler(401,"A user exist with this email !"))
     if(!user){
     //generate and send otp
     const otp = otp_functions.generateOtp();

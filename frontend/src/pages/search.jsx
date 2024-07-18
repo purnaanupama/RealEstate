@@ -18,6 +18,7 @@ const Search = () => {
 
   const [loading,setLoading]=useState(false)
   const [listings,setListings]=useState('')
+  const [showMore,setShowMore]= useState(false)
   console.log(listings)
   useEffect(()=>{
     const urlParams = new URLSearchParams(location.search)
@@ -41,11 +42,17 @@ const Search = () => {
       })    
     }
     const fetchListings = async()=>{
+      setShowMore(false)
       try {
       setLoading(true)
       const query = urlParams.toString();
       const response= await fetch(`/api/listing/get?${query}`)
       const data = await response.json();
+      if(data.length > 8){
+        setShowMore(true)
+      }else{
+        setShowMore(false)
+      }
         setListings(data)
         setLoading(false)
       } catch (error) {
@@ -85,7 +92,19 @@ const Search = () => {
     const searchQuery = urlParams.toString()
     navigate(`/search?${searchQuery}`)
   }
-  
+  const onShowMoreClick=async()=>{
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search)
+    urlParams.set('startIndex',startIndex);
+    const searchQuery = urlParams.toString();
+    const response = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await response.json()
+    if(data.length<8){
+      setShowMore(false)
+    }
+    setListings([...listings,...data])
+  }
   return (
     <div className='mainContainer'>
        <div className="leftSide">
@@ -166,8 +185,13 @@ const Search = () => {
            {!loading && listings && listings.map((listing)=>{
                 return <ListingCard key={listing._id} Listing={listing}/>
            })}
+                  {showMore && (
+              <button style={{padding:'5px 8px',color:'white',background:'green',border:'none',width:'250px',marginTop:'40px',borderRadius:'4px',cursor:'pointer'}} onClick={onShowMoreClick}>
+               Show More
+              </button>
+            )}
            </div>
-        
+     
         </div>
     </div>
   )

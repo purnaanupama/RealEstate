@@ -6,7 +6,7 @@
     background-color: antiquewhite;
     overflow: hidden;
     border-radius: 6px;
-    box-shadow: 2px 1px 5px 1px rgb(226, 216, 216);
+    box-shadow: 2px 1px 5px 1px rgb(203, 197, 197);
 }
 .cardContainer img{
     object-fit: cover;
@@ -27,7 +27,7 @@
     padding: 20px;
 }
 .cardContainer:hover{
-    box-shadow: 2px 1px 5px 1px rgb(186, 177, 177);
+    box-shadow: 2px 1px 5px 1px rgb(163, 158, 158);
 }
 .cardContainer .cardDetails .title{
     width: 100%;

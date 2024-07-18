@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
-import {FaSearch} from 'react-icons/fa'
+import { FaSearch } from 'react-icons/fa'
+import { FaBars } from 'react-icons/fa';
 import '../css/header.css';
 import {Link, useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
@@ -9,6 +10,7 @@ const Header = () => {
 //state=>state.user recieves the entire redux store state and we can acess the currently logged in user
   const {currentUser} = useSelector(state=>state.user)
   const [searchTerm,setSearchTerm] = useState('')
+  const [menu,setMenu] = useState(true);
   const navigate = useNavigate();
   const handleSubmit = (e)=>{
     e.preventDefault();
@@ -44,7 +46,8 @@ const Header = () => {
                    onChange={(e)=>setSearchTerm(e.target.value)}
                    />
         </form>
-        <ul className='menu'>
+        <FaBars onClick={()=>{setMenu(prev=>!prev)}} className='menuIcon'/>
+        <ul className={`menu ${menu?'active':""}`}>
         <Link className='link' to='/'>
             <li>Home</li>
         </Link>

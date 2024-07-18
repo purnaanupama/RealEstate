@@ -2,10 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 // Config dotenv
 dotenv.config();
 
+const __dirname = path.resolve();
 // Create express app
 const app = express();
 
@@ -29,10 +31,17 @@ mongoose.connect(process.env.MONGO)
     // You may choose to log it, notify admins, or take other actions
   });
 
+
 // Mount routers
 app.use('/api/user', require('./routes/user.route'));
 app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/listing', require('./routes/listing.route'));
+
+app.use(express.static(path.join(__dirname,'/client/dist')))
+
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname,'client','disc','index.html'))
+})
 
 // Global error handler
 app.use((err, req, res, next) => {

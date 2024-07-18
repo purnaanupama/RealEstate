@@ -1,0 +1,133 @@
+.homeContainer{
+    padding-top: 70px;
+    height: 100%;
+}
+.homeContainer .top h2 span:nth-child(1){
+    font-size: 30px;
+}
+.homeContainer .top h2{
+    width: 70%;
+    background-color: rgb(207, 250, 250);
+    padding: 50px;
+    margin-left: 30px;
+    margin-top: 20px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+.homeContainer .top h2 span:nth-child(1) span{
+    color: rgb(4, 74, 130);
+    font-weight: 600;
+}
+.homeContainer .top p{
+    padding: 70px;
+    background-color: rgb(200, 243, 222);
+    margin: 30px;
+    border-radius: 10px;
+    font-weight: 500;
+    color: rgb(2, 107, 72);
+    line-height: 30px;
+}
+.filterPage{
+    color: rgb(92, 92, 92);
+    font-weight: 600;
+    margin-left: 30px;
+    margin-top: 20px;
+    font-size: 25px;
+}
+.offerSlider{
+     width: 100%;
+    height: 500px;
+   padding: 30px;
+}
+.recentOffers{
+    padding: 30px;
+}
+.recentOffers .filterPage{
+    color: rgb(51, 51, 51);
+}
+.recentOffersWrapper{
+    width: 100%;
+    height: 430px;
+    display: flex;
+    padding-top: 20px;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+.contactSection{
+    width: 100%;
+    height: 400px;
+    margin-top: 1750px;
+    display: flex;
+    
+}
+.contactSection .contactLeft,.contactMiddle,.contactRight{
+    width: 33.33%;
+    padding: 20px;
+    border-right: 1px solid rgb(202, 201, 201);
+    height: 400px;
+    background: rgb(42, 42, 82);
+    border-top: 1px solid rgb(202, 201, 201);
+    color: white;
+}
+.contactSection .contactLeft p{
+    font-size: 20px;
+}
+.contactSection .contactMiddle p{
+    font-size: 20px;
+}
+.contactSection .contactLeft ul {
+    margin-top: 20px;
+}
+.contactSection .contactLeft ul li{
+    list-style-type:none;
+    padding: 5px;
+}
+.contactSection .contactMiddle ul {
+    margin-top: 20px;
+}
+.contactSection .contactMiddle ul li{
+    list-style-type:none;
+    padding: 5px;
+}
+.contactSection .contactRight{
+    font-size: 18px; 
+}
+
+@media screen and (max-width:420px){
+    .homeContainer .top h2{
+        width: 100%;
+        margin-left: 0px;
+    }
+    .homeContainer .top{
+        padding: 15px;
+    }
+    .homeContainer .top p{
+        padding: 15px;
+        margin: 0px;
+        margin-top: 30px;
+    }
+    .recentOffers{
+        padding: 10px;
+
+      }
+    .offerSlider{
+        padding: 10px;
+      }
+    .recentOffers h3{
+      }
+    .recentOffersWrapper{
+        flex-direction:column ;
+        height: 100%;
+      }
+      .contactSection{
+        margin-top: 5500px;
+        flex-direction: column;
+        width: 100%;
+      }
+      .contactSection .contactLeft,.contactMiddle,.contactRight{
+        width: 100%;
+      }
+
+}
+

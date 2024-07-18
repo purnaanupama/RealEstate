@@ -202,3 +202,43 @@ opacity: .7;
     text-decoration: none;
     color: rgb(67, 58, 146);
 }  
+@media screen and (max-width:420px){
+    .profile{
+        flex-direction: column;
+        padding: 10px;
+    }
+    .profileRight{
+        width: 100%;
+        margin-left: 0px;
+    }
+
+    .profileLeft{
+        position: static;
+        width: 100%;
+        padding: 12px;
+    }
+    .form1{
+        width: 350px;
+        padding-bottom: 40px;
+        height: 600px;
+    }
+    .form1 input,.update,.createListing,.options{
+        width: 270px;
+    }
+    .showListings{
+        width: 270px;
+    }
+    .fillSpace{
+        width: 350px;
+        padding: 20px;
+    }
+    .profileLeft .superTitle{
+        margin-left: 0px;
+    }
+    .listingCard{
+        width: 370px;
+    }
+    .OAuth{
+        width: 370px;
+    }
+}

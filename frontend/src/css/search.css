@@ -1,15 +1,17 @@
-.searchBar2{
+ .searchBar2{
     display: flex;
     width: 100%;
-    align-items: center;
     justify-content: space-around;
     padding-left: 30px;
     padding-right:30px;
+
 }
 .form4{
     margin-top: 40px;
     width: 400px;
+
 }
+
 .noValues{
    text-align: center;
    padding: 60px;
@@ -17,6 +19,7 @@
    align-items: center;
    justify-content: center;
 }
+
 .searchBar2 input{
     width: 100%;
     border-radius: 5px;
@@ -25,6 +28,7 @@
     box-shadow: 1px 1px 4px 2px rgba(1,1,1,0.2);
     outline: none;
 }
+
 .mainContainer{
     display: flex;
     padding-top: 60px;
@@ -35,14 +39,19 @@
     overflow: hidden;
     position: fixed;
     width: 400px;
+    background: rgb(255, 255, 255);
 }
+
 .rightSide h2{
    padding-top: 40px;
    padding-left: 50px;
 }
+
 .rightSide{
     margin-left: 400px;
 }
+
+
 .filters{
     height: 370px;
     margin-top: 30px;
@@ -54,10 +63,12 @@
     gap: 10px;
     border-bottom:1px solid rgb(231, 228, 228);
 }
+
 .filters label{
     display: flex;
     gap: 20px;
 }
+
 .filters p{
     padding-top: 12px;
     border-top: 1px solid rgb(231, 228, 228);
@@ -66,6 +77,7 @@
     font-weight: 500;
     margin-top: 12px;
 }
+
 .amenitiesDropdown{
     margin-left: 30px;
     padding: 8px 5px;
@@ -73,6 +85,7 @@
     margin-right: 20px;
     outline: none;
 }
+
 .searchForHouses{
     padding: 8px 5px;
     width: 300px;
@@ -85,6 +98,34 @@
     cursor: pointer;
     box-shadow: 1px 1px 4px 2px rgba(97, 119, 207, 0.6);
 }
+
 .searchForHouses:hover{
     background-color: rgb(62, 62, 114);
 }
+@media screen and (max-width:420px){
+    .leftSide{
+        width: 100%;
+        position: static;
+        overflow: auto;
+        height: 650px;
+        border-right: none;
+    } 
+    .rightSide{
+        margin-left: 0px;
+    }
+    .mainContainer{
+        display: flex;
+        flex-direction: column;
+    }
+    .rightSide h2{
+        padding-top: 10px;
+        padding-left: 20px;
+     }
+     .filters{
+        border-bottom:none;
+        margin-top: 10px;
+     }
+     .form4{
+        margin-top: 10px;
+     }
+} 

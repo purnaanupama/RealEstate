@@ -80,7 +80,7 @@ const Signup = () => {
       <button disabled={loading} className='sign-up-btn'>
              {loading?'Loading...':'Sign Up'}
       </button>
-      <OAuth/>
+      <OAuth className='OAuth'/>
       <div className="account">
         <p>Have an account ?  <Link to={'/sign-in'} className='link'>Sign-in</Link></p>
       </div>

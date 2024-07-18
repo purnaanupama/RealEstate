@@ -125,3 +125,11 @@ main .loading{
 .sendEmailButton:hover{
   background-color: rgb(37, 37, 86);
 }
+@media screen and (max-width:420px){
+  .overlay-text {
+    width: 340px;
+    font-size: 12px;
+    height: 180px;
+  }
+
+}

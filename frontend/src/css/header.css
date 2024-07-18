@@ -73,25 +73,40 @@ h1 > .first{
     position: relative;
 
 }
+.menuIcon{
+    display: none;
+}
 
-@media screen and (max-width: 700px){
-    .menu li:nth-child(1){
-        display: none;
-    }
-    .menu li:nth-child(2){
-        display: none;
-    }
+@media screen and (max-width:420px) {
     .form5{
-        width: 200px;
-        padding: 6px 12px;
+        width: 180px;
     }
-    .logo{
-        font-size: 25px;
+    .Header-container{
+        justify-content: space-around;
+        position: relative;
     }
-    .form5 > input{
-        width: 50px;
+    .menu{
+       position:absolute;
+       background-color: rgb(249, 249, 249);
+       top: 65px;
+       display: flex;
+       flex-direction: column-reverse;
+       width: 50%;
+       right: 0px;
+       padding: 20px;
+       box-shadow: 1px 1px 4px 2px rgba(1,1,1,0.2);
     }
-    .menu li{
-        padding: 0;
+    .menu.active{
+        display: none;
     }
+    .logo span{
+       font-size: 20px;
+    }
+    .menuIcon{
+    display: block;
+     padding-right: 10px;
+     font-size: 30px;
+     color: rgb(82, 82, 82);
+    }
+
 }

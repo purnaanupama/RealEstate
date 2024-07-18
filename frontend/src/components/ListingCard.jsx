@@ -26,7 +26,6 @@ const ListingCard = ({Listing}) => {
           </div>}
            </div>
         </div>
-    
     </Link>
 
   )
